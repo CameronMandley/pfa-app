@@ -10,3 +10,5 @@ Recommended rules for `main`:
   - Commitlint
 - Require linear history (optional)
 - Restrict who can push to matching branches (maintainers only)
+
+#dummy
