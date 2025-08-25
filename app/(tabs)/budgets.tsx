@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { ScrollView, Text, View } from "react-native";
+import BudgetCard from "../../components/BudgetCard";
 import { apiGet } from "../../lib/api";
 
+type Line = { name: string; spent: number; limit: number };
 type BudgetResp = {
   available_to_spend: number;
-  lines?: Array<{ name: string; amount: number }>;
+  lines: Line[];
 };
 
 export default function Budgets() {
@@ -14,23 +16,34 @@ export default function Budgets() {
   useEffect(() => {
     apiGet<BudgetResp>("/budgets/current")
       .then(setData)
-      .catch(e => setErr(e.message));
+      .catch((e) => setErr(e.message));
   }, []);
 
   if (err) return <Text style={{ padding: 16 }}>Error: {err}</Text>;
   if (!data) return <Text style={{ padding: 16 }}>Loading…</Text>;
 
   return (
-    <View style={{ padding: 16 }}>
-      <Text style={{ fontSize: 22, fontWeight: "600" }}>Budget</Text>
-      <Text style={{ marginTop: 8 }}>
-        Available to spend: ${data.available_to_spend?.toFixed(2)}
-      </Text>
-      {data.lines?.map((l, i) => (
-        <Text key={i} style={{ marginTop: 4 }}>
-          • {l.name}: ${l.amount.toFixed(2)}
+    <ScrollView style={{ padding: 16 }} contentContainerStyle={{ gap: 12 }}>
+      <Text style={{ fontSize: 22, fontWeight: "700", marginBottom: 8 }}>Budgets</Text>
+
+      <View
+        style={{
+          padding: 12,
+          borderRadius: 12,
+          backgroundColor: "#0B0D12",
+          borderWidth: 1,
+          borderColor: "#222631",
+        }}
+      >
+        <Text style={{ color: "#9AA3B2" }}>Available to spend</Text>
+        <Text style={{ fontSize: 24, fontWeight: "700", color: "#E6E8EE" }}>
+          ${data.available_to_spend.toFixed(2)}
         </Text>
+      </View>
+
+      {data.lines?.map((l, i) => (
+        <BudgetCard key={i} title={l.name} spent={l.spent} limit={l.limit} />
       ))}
-    </View>
+    </ScrollView>
   );
 }
