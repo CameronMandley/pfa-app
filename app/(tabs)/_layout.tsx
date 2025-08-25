@@ -6,6 +6,7 @@ export default function Layout() {
       <Tabs.Screen name="index" options={{ title: "Home" }} />
       <Tabs.Screen name="budgets" options={{ title: "Budgets" }} />
       <Tabs.Screen name="simulator" options={{ title: "Simulator" }} />
+      <Tabs.Screen name="link" options={{ title: "Link Bank (Stub)" }} />
     </Tabs>
   );
 }
